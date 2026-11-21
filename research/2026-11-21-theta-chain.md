@@ -71,3 +71,20 @@ The five statements are in `src/Main.lean` and `src/Statements.lean` (Mathlib's 
 - Independent Lean project committed: YES; whether it compiles depends on recorded CI output.
 - Source-line proof term tracing from original `ChainScalar` to headline RH: NOT DONE.
 - Independent agent review: NOT YET CONDUCTED; reviewer packet exists and must be given to a separate agent.
+
+## Verbatim Lean declaration under investigation
+
+From `src/Formalism/ThetaLiftIndependence/Statement.lean`, commit `8f558a8848a80dac6851a00a95ca477ff403e922`:
+
+```lean
+def ChainScalar : Prop :=
+  ∀ (𝕜 : Type) [RCLike 𝕜] (E : ℕ → Type) [∀ j, NormedAddCommGroup (E j)]
+    [∀ j, InnerProductSpace 𝕜 (E j)] [∀ j, FiniteDimensional 𝕜 (E j)]
+    (T : ∀ j, E (j + 1) →ₗ[𝕜] E j) (S : ∀ j, Submodule 𝕜 (E j)) (c : ℕ → 𝕜),
+    (∀ j, ∀ x ∈ S j, T j (LinearMap.adjoint (T j) x) = c j • x) →
+    (∀ j, ∀ x ∈ S j, LinearMap.adjoint (T j) x ∈ S (j + 1)) →
+    ∀ (m : ℕ), ∀ x ∈ S 0,
+      downChain T m (LinearMap.adjoint (downChain T m) x) = (∏ j ∈ Finset.range m, c j) • x
+```
+
+All quantifiers and hypotheses above are part of the original declaration: `RCLike` for the scalar field, normed groups/inner products/finite dimensionality for every level, `Submodule` invariants, a local scalar equation and its separate stability hypothesis. The source uses a definition `: Prop`, so this text is **not by itself a proof**. The separate `ThetaChain.scalar_chain` is an algebraic analogue with different ambient assumptions; these two statements are not definitionally equal.
