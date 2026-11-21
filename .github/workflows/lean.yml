@@ -1,0 +1,30 @@
+name: Verify isolated theta-chain lemma
+
+on:
+  push:
+    branches:
+      - "research/theta-chain-scalar-2026-11-21"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up pinned Lean and Mathlib cache, then build
+        uses: leanprover/lean-action@v1
+        with:
+          build: true
+          test: false
+          lint: false
+      - name: Check exact file and theorem with the kernel
+        run: lake env lean ThetaChain.lean
+      - name: Reject any unfinished proof or custom axiom
+        run: |
+          if grep -En '(^|[[:space:]])(sorry|admit|axiom)[[:space:]]' ThetaChain.lean; then
+            echo "Unfinished proof or axiom found"
+            exit 1
+          fi
