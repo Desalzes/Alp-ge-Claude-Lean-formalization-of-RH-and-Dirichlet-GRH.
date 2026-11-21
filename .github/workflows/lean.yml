@@ -1,11 +1,14 @@
-name: Verify isolated theta-chain lemma
+name: Verify isolated theta-chain and tower-nonvanishing lemmas
 
 on:
   push:
     branches:
       - "research/theta-chain-scalar-2026-11-21"
+      - "research/theta-tower-nonvanishing-2026-11-21"
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - "research/theta-chain-scalar-2026-11-21"
   workflow_dispatch:
 
 jobs:
@@ -14,17 +17,21 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - name: Set up pinned Lean and Mathlib cache, then build
+      - name: Install pinned Lean, fetch Mathlib cache, build both modules
         uses: leanprover/lean-action@v1
         with:
           build: true
           test: false
           lint: false
-      - name: Check exact file and theorem with the kernel
-        run: lake env lean ThetaChain.lean
-      - name: Reject any unfinished proof or custom axiom
+      - name: Check both exact Lean files and inspect axioms
         run: |
-          if grep -En '(^|[[:space:]])(sorry|admit|axiom)[[:space:]]' ThetaChain.lean; then
-            echo "Unfinished proof or axiom found"
+          lake env lean ThetaChain.lean
+          lake env lean ThetaTowerNonzero.lean
+      - name: Reject unfinished proofs or custom axioms
+        run: |
+          if grep -En '(^|[[:space:]])(sorry|admit|axiom)[[:space:]]' ThetaChain.lean ThetaTowerNonzero.lean; then
+            echo "Unfinished proof or custom axiom found"
             exit 1
           fi
+      - name: Exact-arithmetic falsification checks
+        run: python3 scripts/test_tower_nonzero.py
