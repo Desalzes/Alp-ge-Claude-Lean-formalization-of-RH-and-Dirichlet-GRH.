@@ -1,6 +1,6 @@
 name = "theta_chain_extract"
 version = "0.1.0"
-defaultTargets = ["ThetaChain"]
+defaultTargets = ["ThetaChain", "ThetaTowerNonzero", "ThetaStepRatioCore", "ThetaFactorGap"]
 
 [leanOptions]
 autoImplicit = false
@@ -13,3 +13,12 @@ rev = "0df444a360eaa60ab8c11dca51a86af692955474"
 
 [[lean_lib]]
 name = "ThetaChain"
+
+[[lean_lib]]
+name = "ThetaTowerNonzero"
+
+[[lean_lib]]
+name = "ThetaStepRatioCore"
+
+[[lean_lib]]
+name = "ThetaFactorGap"
