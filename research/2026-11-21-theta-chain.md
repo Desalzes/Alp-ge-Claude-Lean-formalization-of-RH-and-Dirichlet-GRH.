@@ -1,6 +1,6 @@
 # Extraction T01 — scalar identities along finite lifting chains
 
-Date: 2026-11-21. Status: **formal compilation pending**, exact-arithmetic falsification tests completed. This document does not claim a new RH or GRH proof.
+Date: 2026-11-21. Status: **extracted algebraic lemma proved in pinned Lean CI; independent mathematical review pending**, exact-arithmetic falsification tests completed. This document does not claim a new RH or GRH proof.
 
 ## Source lock and declarations
 
@@ -53,7 +53,7 @@ The proof is induction using `upChain_mem`, R-linearity and the finite product r
 
 ## Verification contract
 
-Pin to Lean 4 v4.33.1 and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474` (the published source's pin). Run `lake build ThetaChain`, check `#print axioms ThetaChain.scalar_chain`, and scan `ThetaChain.lean` for placeholders and extra axiom declarations. A completed proof may use only Lean's ordinary foundations (in source audit: `propext`, `Classical.choice`, `Quot.sound`). If compilation is unavailable or fails, status must remain BLOCKED, not PROVED.
+Pin to Lean 4 v4.33.1 and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474` (the published source's pin). Run `lake build ThetaChain`, check `#print axioms ThetaChain.scalar_chain`, and scan `ThetaChain.lean` for placeholders and extra axiom declarations. A completed proof may use only Lean's ordinary foundations (in source audit: `propext`, `Classical.choice`, `Quot.sound`). Compilation passed for this extracted lemma in CI run 44933966518; see `research/verification-results.md`. This is not a proof of any automorphic/analytic input or of RH.
 
 ## Original proof audit (not our verification)
 
@@ -68,7 +68,7 @@ The five statements are in `src/Main.lean` and `src/Statements.lean` (Mathlib's 
 - Claimed novelty of scalar-chain algebra: NO; standard linear algebra.
 - Falsification of a weakened claim: YES.
 - Exact symbolic check of two-stage counterexample: YES (integer matrices).
-- Independent Lean project committed: YES; whether it compiles depends on recorded CI output.
+- Independent Lean project committed and compiled: YES — CI run [44933966518](https://github.com/Desalzes/Alp-ge-Claude-Lean-formalization-of-RH-and-Dirichlet-GRH./actions/runs/44933966518); `ThetaChain.scalar_chain` kernel-accepted with standard foundational axioms only.
 - Source-line proof term tracing from original `ChainScalar` to headline RH: NOT DONE.
 - Independent agent review: NOT YET CONDUCTED; reviewer packet exists and must be given to a separate agent.
 
