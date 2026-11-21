@@ -32,7 +32,7 @@ theorem multiplier_nonzero
   have hprod : (∏ t ∈ S, g t / g' t) ≠ 0 := by
     exact Finset.prod_ne_zero_iff.mpr
       (fun t ht => div_ne_zero (hg t ht) (hg' t ht))
-  exact map_ne_zero σ (mul_ne_zero hb hprod)
+  exact (map_ne_zero σ).2 (mul_ne_zero hb hprod)
 
 /-- An explicit nonzero StepRatio multiplier preserves nonvanishing in
 both directions. No claim about critical-strip zeros is made. -/
