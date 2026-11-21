@@ -28,9 +28,10 @@ jobs:
           lake env lean ThetaChain.lean
           lake env lean ThetaTowerNonzero.lean
           lake env lean ThetaStepRatioCore.lean
+          lake env lean ThetaFactorGap.lean
       - name: Reject unfinished proofs or custom axioms
         run: |
-          if grep -En '(^|[[:space:]])(sorry|admit|axiom)[[:space:]]' ThetaChain.lean ThetaTowerNonzero.lean ThetaStepRatioCore.lean; then
+          if grep -En '(^|[[:space:]])(sorry|admit|axiom)[[:space:]]' ThetaChain.lean ThetaTowerNonzero.lean ThetaStepRatioCore.lean ThetaFactorGap.lean; then
             echo "Unfinished proof or custom axiom found"
             exit 1
           fi
