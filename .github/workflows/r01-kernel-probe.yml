@@ -22,6 +22,15 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_r01_kernel_probe.py -v
       - name: SHA256-verified membership and shortest proof witnesses
         run: python3 tools/r01_kernel_probe.py --download --parents | tee r01-proof-cone-results.txt
+      - name: R02 factorization-reconstruction and descent witnesses
+        run: |
+          python3 tools/r01_kernel_probe.py --parents --targets \
+            GlobalTheory.SqTower.descent \
+            GlobalTheory.SqTower.FacIn \
+            GlobalTheory.T.exists_factor_of_isStageC \
+            GlobalTheory.StageFactor.theta_tower_stage_norm_factorization \
+            GlobalTheory.StageFactor.factor_of_parts \
+            | tee r02-stage-bridge-results.txt
       - name: Publish audit output
         if: always()
         run: |
@@ -32,9 +41,17 @@ jobs:
             cat r01-proof-cone-results.txt >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
           fi
+          if test -f r02-stage-bridge-results.txt; then
+            echo '## R02 stage-factorization bridge check' >> "$GITHUB_STEP_SUMMARY"
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            cat r02-stage-bridge-results.txt >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: r01-kernel-cone-results
-          path: r01-proof-cone-results.txt
+          path: |
+            r01-proof-cone-results.txt
+            r02-stage-bridge-results.txt
           if-no-files-found: ignore
