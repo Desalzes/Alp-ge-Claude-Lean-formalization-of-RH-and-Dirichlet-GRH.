@@ -47,7 +47,17 @@ The wrapper `StageFactor.theta_tower_stage_norm_factorization` obtains `factor_o
 
 ## Connection to the kernel-cone evidence
 
-[The R01 real-data run](https://github.com/Desalzes/Alp-ge-Claude-Lean-formalization-of-RH-and-Dirichlet-GRH./actions/runs/45042432036) established the **actual** kernel path from the published theorem to `SqTower.tower_alt_bis`, then to the small-rank step. A further CI query has been added for `SqTower.descent`, `FacIn`, `T.exists_factor_of_isStageC`, `StageFactor.theta_tower_stage_norm_factorization`, and `StageFactor.factor_of_parts`. The result of that follow-up query must be collected from its successful workflow before making a claim about each exact declaration's kernel-cone membership.
+[The R01 real-data run](https://github.com/Desalzes/Alp-ge-Claude-Lean-formalization-of-RH-and-Dirichlet-GRH./actions/runs/45042432036) established the **actual** kernel path from the published theorem to `SqTower.tower_alt_bis`, then to the small-rank step. A further [successful CI query (run 45042636543)](https://github.com/Desalzes/Alp-ge-Claude-Lean-formalization-of-RH-and-Dirichlet-GRH./actions/runs/45042636543) **verified all 5/5 of these exact declarations in the published kernel cone**, with SHA256-checked release v0.2.1 assets and a shortest witness chain for each:
+
+| Original declaration | Cone membership | Shortest witness (edges) |
+|---|---|---:|
+| `GlobalTheory.SqTower.descent` | Present | 10; via `SqTower.tower_alt_bis` |
+| `GlobalTheory.SqTower.FacIn` | Present | 11; via `SqTower.descent` (type reference) |
+| `GlobalTheory.T.exists_factor_of_isStageC` | Present | 10; via `SqTower.tower_alt_bis` |
+| `GlobalTheory.StageFactor.theta_tower_stage_norm_factorization` | Present | 11; via `T.exists_factor_of_isStageC` |
+| `GlobalTheory.StageFactor.factor_of_parts` | Present | 12; via `theta_tower_stage_norm_factorization` |
+
+The two key parallel, **actually referenced** branches are `tower_alt_bis → descent` and `tower_alt_bis → exists_factor_of_isStageC → theta_tower_stage_norm_factorization → factor_of_parts`. This confirms the source-level stage reconstruction is connected to the top-level kernel dependency graph, not an unused side lemma. A kernel reference by itself does not independently validate the analytical assumptions.
 
 ## Revised classification and next task
 
