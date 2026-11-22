@@ -1,6 +1,6 @@
 # R01 — Kernel-dependency probe for T01/T02 declarations
 
-**Date:** 2026-11-22. **Status:** reproducible script added; real-data result must be read from GitHub Actions before any reachability claim. No new RH/GRH theorem is asserted.
+**Date:** 2026-11-22. **Status:** real v0.2.1 data queried and SHA256-verified; 7/9 exact declaration names present, 2/9 absent. No new RH/GRH theorem is asserted.
 
 ## Question and scope
 
@@ -28,4 +28,24 @@ The CI workflow `.github/workflows/r01-kernel-probe.yml` runs three synthetic-da
 
 **Next scientific step:** trace positives through the original source and locate the actual stage-iteration mechanism rather than speculate from the isolated abstract counterexample. Any findings should be committed separately with exact dataset-output lines.
 
-**Verification status at authoring:** 3/3 synthetic unit tests passed locally. The *real* kernel-membership and path outputs are not asserted until the workflow runs successfully.
+**Verification:** 3/3 local synthetic tests passed; real asset SHA256 checks, membership checks and shortest-path extraction succeeded in the cited GitHub Actions run.
+
+## Actual kernel-cone results (2026-11-22)
+
+**Execution:** [GitHub Actions run 45042432036](https://github.com/Desalzes/Alp-ge-Claude-Lean-formalization-of-RH-and-Dirichlet-GRH./actions/runs/45042432036), job `query-kernel-cone`, completed **successfully**. The job downloaded both release v0.2.1 assets, passed both SHA256 checks, ran all 3 unit tests, queried nine exact names, and uploaded [the verbatim result artifact](https://github.com/Desalzes/Alp-ge-Claude-Lean-formalization-of-RH-and-Dirichlet-GRH./actions/runs/45042432036/artifacts/14762455216).
+
+| Exact source declaration | Kernel declaration closure | Shortest witness edges | Evidence / route |
+|---|---|---:|---|
+| `Formalism.ThetaLiftIndependence.ChainScalar` | **Absent** | — | No exact match in `cone-decls`; does not rule out related structural machinery |
+| `Formalism.ThetaLiftIndependence.ChainScalarLemmas.mem` | **Absent** | — | No exact match; source-name fidelity for this fully qualified name needs checking |
+| `GlobalTheory.SqStep.theta_tower_norm_step_small_rank` | **Present** | 11 | `GlobalTheory.SqTower.tower_alt_bis` → `GlobalTheory.T.witt_tower_norm_step_of_small_rank` → step lemma |
+| `GlobalTheory.T.witt_tower_norm_step_of_small_rank` | **Present** | 10 | `GlobalTheory.SqTower.tower_alt_bis` → wrapper |
+| `GlobalTheory.Square.StepRatio` | **Present** | 10 | `GlobalTheory.RowClaim.twisted_local_factor_ratio_holds` → definition |
+| `GlobalTheory.SqStepArith.stepFac_ratio_core` | **Present** | 14 | theta step → `GlobalTheory.T.thetaStepFactor_ratio_unit_gaussSumQuotient` → `stepFac_ratio` → core |
+| `GlobalTheory.ConstRatio.Factor` | **Present** | 10 | `GlobalTheory.RowClaim.twisted_local_factor_ratio_holds` → definition |
+| `GlobalTheory.ConstRatio.Factor.isConst` | **Present** | 10 | `GlobalTheory.SqTop.triEx_holds_alt` → forward implication |
+| `GlobalTheory.BotTransfer.bottom_constant_transfer_along_tower` | **Present** | 16 | `GlobalTheory.BotRatio.bottom_theta_constant_ratio_eq` → `GlobalTheory.T.witt_tower_bottom_constant_transfer` → bottom transfer |
+
+**Shared verified upstream route (one shortest witness, not necessarily unique):** `LFunction_ne_zero_of_half_lt_re` → `allChi` → `UpperTheory.FinalTheorems.everyCharacter` → `everyCharacter_of_row` → `UpperTheory.LiteratureTheorems.every_character_of_literature_of_vWin` → `UpperTheory.Lit.every_character_of_theta_integrals_local_matching` → `UpperTheory.Lit.nonempty_hyps_definite_side_of_closed_bound`, then the theta-specific branches above.
+
+**Research prioritization changed by this result:** T01's chosen original `ChainScalar` abstraction has no exact name in this published kernel cone; it remains a valid independent algebraic result, but further polishing it should rank below source-faithful analysis of the *actually referenced* `tower_alt_bis` / step / bottom transfer branches. This is **not** a claim of a flaw in the released Lean formalization. In particular, the presence of `Factor.isConst` does not supply an `IsConst → Factor` converse, nor prove how the actual tower iterates. The next task should inspect `GlobalTheory.SqTower.tower_alt_bis` for the concrete stage-construction mechanism.
